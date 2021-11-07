@@ -58,7 +58,7 @@ var AnZip = // change the name if you need
           if (dat.buffer || dat instanceof Array || dat instanceof ArrayBuffer || dat instanceof Buffer)
             dat = UseTA ? new Uint8Array(dat.buffer || dat) : dat;
           else
-            throw new Error('data type error');
+            throw new Error;
         } catch (e) {
           throw new Error('data must be one of type Array, TypedArray, ArrayBuffer, Buffer, or string.');
         }
