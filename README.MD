@@ -1,11 +1,11 @@
 # AnZip.js
-AnZip.js creates an **uncompressed** zip file.
+Creates an **uncompressed** zip file.
 
 It contains **no** compression processes, so the code is simple and **fast**.
 ## Purpose
 When your website with JavaScript produces many binary files and wants to let users save them all, needs to make their browsers start download processes again and again.
 
-AnZip.js provides an ***easy way*** to combine the files into **a zip file** so that the user's browser need only a single download dialog.
+AnZip.js provides an ***easy way*** to combine the files into **a zip file** so that the their browsers need only a single download dialog.
 
 ## Installation
 Just copy and paste the content of `anzip.min.js` (or `anzip.js`) into your code, or load it from a script tag.
@@ -47,7 +47,7 @@ azip.add('dir3/file3.txt', dat3);
 // 3: output the zip as an Uint8Array
 var zip = azip.zip();
 
-// convert to data URL
+// convert to Blob URL
 var blob = new Blob([zip], {type: 'application/zip'});
 var src = window.URL.createObjectURL(blob);
 ```

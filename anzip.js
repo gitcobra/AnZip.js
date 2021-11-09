@@ -47,8 +47,7 @@ var AnZip = // change the name if you need
       // check path
       if (!path) throw new Error('path is empty');
       path = String(path).replace(/\\/g, '/'); // replace backslashes with forward slashes
-      if (/\\|^\/|^[a-z]:/i.test(path)) throw new Error('the path must not contain a drive letter, a leading slash: "' + path + '"');
-      if (/\/{2,}/.test(path)) throw new Error('empty directory name: "' + path + '"');
+      if (/\/{2,}|\\|^\/|^[a-z]+:/i.test(path)) throw new Error('invalid path. containing a drive letter, a leading slash, or empty directory name: "' + path + '"');
       // check file
       var size = 0, crc = 0;
       if (dat) {
@@ -56,7 +55,7 @@ var AnZip = // change the name if you need
         if (typeof dat === 'string') dat = strToUTF8(dat);
         if (!(dat instanceof A8)) try {
           if (dat.buffer || dat instanceof Array || dat instanceof ArrayBuffer || dat instanceof Buffer)
-            dat = UseTA ? new Uint8Array(dat.buffer || dat) : dat;
+            dat = new Uint8Array(dat.buffer || dat);
           else
             throw new Error;
         } catch (e) {
@@ -72,16 +71,17 @@ var AnZip = // change the name if you need
       var dirs = path.replace(/\/+$/, '').split("/");
       var pathstack = '';
       while (dirs.length) {
+        // check whether the path already exists
         pathstack += dirs.shift();
+        if (this._d[pathstack]) continue;
+
+        // it's new path
         var isFile = dat && (dirs.length === 0);
-        pathstack += (isFile ? '' : '/');
-        if (this.has(pathstack)) continue;
         this._d[pathstack] = true;
         this._c++;
-
+        pathstack += (isFile ? '' : '/');
         var pathbin = strToUTF8(pathstack);
         var pathLen = pathbin.length;
-
         var dsize = isFile ? size : 0;
         var dsizeLE = getLE32(dsize);
 
@@ -98,8 +98,7 @@ var AnZip = // change the name if you need
         this._curLFHind += 30 + pathLen + dsize;
       }
       // add file
-      if (dat)
-        this._lfh.push(dat);
+      if (dat) this._lfh.push(dat);
     },
     has: function (path) {
       return !!this._d[path.replace(/\/+$/, '')];
@@ -108,16 +107,15 @@ var AnZip = // change the name if you need
     zip: function () {
       // End of central directory record // signature(4)  // disk  // file count // file count    // size of central directory  // offset of start of central directory   // comment length
       var ecd = [0x50, 0x4B, 0x05, 0x06, 0x00, 0x00, 0x00, 0x00, this._c & 0xFF, this._c >> 8, this._c & 0xFF, this._c >> 8].concat(getLE32(this._cdhLen), getLE32(this._curLFHind), [0x00, 0x00]);
-
       // join all binary data
-      var output = new A8(this._curLFHind + this._cdhLen + ecd.length);
-      var conc = this._lfh.concat(this._cdh, [ecd]);
-      if (output instanceof Array)
-        output = [].concat.apply([], conc);
+      var output, arrayChain = this._lfh.concat(this._cdh, [ecd]);
+      if ( A8 === Array )
+        output = [].concat.apply([], arrayChain);
       else {
         var offset = 0;
-        for (var i = 0; i < conc.length; i++) {
-          var n = conc[i];
+        output = new A8(this._curLFHind + this._cdhLen + ecd.length);
+        for (var i = 0; i < arrayChain.length; i++) {
+          var n = arrayChain[i];
           output.set(n, offset);
           offset += n.length;
         }
