@@ -2,10 +2,12 @@ var AnZip = // change the name if you need
 (function () {
   // *for Node.js
   if (typeof exports === 'object') module.exports = AnZip;
+
   // use TypedArray or Array?
   var UseTA = typeof Uint8Array !== 'undefined';
   var A8 = UseTA ? Uint8Array : Array, A32 = UseTA ? Uint32Array : Array;
-  // CRC32 table
+
+  // create CRC32 table
   var CRC32Table = new A32(256);
   for (var i = 0; i < 256; i++) {
     var val = i;
@@ -21,18 +23,21 @@ var AnZip = // change the name if you need
     }
     return (crc ^ 0xFFFFFFFF) >>> 0;
   }
+
   // encode to UTF-8
   function strToUTF8(str) {
     var a = [];
-    encodeURI(str).replace(/%(..)|(.)/g, function (m, $1, $2) {
+    encodeURIComponent(str).replace(/%(..)|(.)/g, function (m, $1, $2) {
       a.push($1 ? parseInt($1, 16) : $2.charCodeAt(0));
     });
     return UseTA ? new A8(a) : a;
   }
-  // get number as little endian
+
+  // get 32bit number as a little-endian array
   function getLE32(num) {
     return [num & 0xFF, num >> 8 & 0xFF, num >> 16 & 0xFF, num >> 24 & 0xFF];
   }
+
   // AnZip constructor
   function AnZip() {
     this._d = {}; // directory record
@@ -41,7 +46,7 @@ var AnZip = // change the name if you need
     this._cdh = []; // central directory headers
     this._cdhLen = 0; // whole central directory header size
     this._c = 0; // file count
-  };
+  }
   AnZip.prototype = {
     add: function (path, dat) {
       // check path
@@ -50,7 +55,7 @@ var AnZip = // change the name if you need
       if (/\/{2,}|\\|^\/|^[a-z]+:/i.test(path)) throw new Error('invalid path. containing a drive letter, a leading slash, or empty directory name: "' + path + '"');
       // check file
       var size = 0, crc = 0;
-      if (dat) {
+      if (typeof dat !== 'undefined') {
         if (!/[^/]+$/.test(path)) throw new Error('needs a file name: "' + path + '"');
         if (typeof dat === 'string') dat = strToUTF8(dat);
         if (!(dat instanceof A8)) try {
@@ -73,13 +78,15 @@ var AnZip = // change the name if you need
       while (dirs.length) {
         // check whether the path already exists
         pathstack += dirs.shift();
+
+        var isFile = dat && (dirs.length === 0);
+        pathstack += (isFile ? '' : '/');
         if (this._d[pathstack]) continue;
 
-        // it's new path
-        var isFile = dat && (dirs.length === 0);
+        // it's a new path
         this._d[pathstack] = true;
         this._c++;
-        pathstack += (isFile ? '' : '/');
+
         var pathbin = strToUTF8(pathstack);
         var pathLen = pathbin.length;
         var dsize = isFile ? size : 0;
@@ -100,6 +107,7 @@ var AnZip = // change the name if you need
       // add file
       if (dat) this._lfh.push(dat);
     },
+    // return whether the path already exists
     has: function (path) {
       return !!this._d[path.replace(/\/+$/, '')];
     },
@@ -121,8 +129,7 @@ var AnZip = // change the name if you need
         }
       }
       return output;
-    },
-    valueOf: function () { return this.zip() }
+    }
   };
   return AnZip;
 })();

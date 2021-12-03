@@ -5,7 +5,7 @@ It contains **no** compression processes, so the code is simple and **fast**.
 ## Purpose
 When your website with JavaScript produces many binary files and wants to let users save them all, needs to make their browsers start download processes again and again.
 
-AnZip.js provides an ***easy way*** to combine the files into **a zip file** so that the their browsers need only a single download dialog.
+AnZip.js provides an ***easy way*** to combine the files into **a zip file** so that their browsers need only a single download dialog.
 
 ## Installation
 Just copy and paste the content of `anzip.min.js` (or `anzip.js`) into your code, or load it from a script tag.
@@ -25,9 +25,9 @@ CDN:
 
 1. `new AnZip` :The constructor needs no parameter.
 
-1. `.add(path, data)` :To add directories and data.
+1. `.add(path, data)` :Add directories and data.
 
-1. `.zip()` :Outputs the zip as Uint8Array.
+1. `.zip()` :Get an uncompressed zip as Uint8Array.
 
 #### Sample Code:
 ```
