@@ -1,0 +1,31 @@
+{
+  "name": "@gitcobra/anzip",
+  "version": "1.0.1",
+  "description": "Simply creates uncompressed zip file.",
+  "main": "dist/anzip.umd.js",
+  "browser": "dist/anzip.esm.js",
+  "files": [
+    "dist/**/*",
+    "types/**/*"
+  ],
+  "directories": {},
+  "devDependencies": {
+    "rollup": "^2.72.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "typescript": "^4.8.3"
+  },
+  "scripts": {
+    "build": "rollup -c && tsc ./src/anzip.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "test": "node ./test/test_node.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gitcobra/AnZip.js.git"
+  },
+  "author": "gitcobra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gitcobra/AnZip.js/issues"
+  },
+  "homepage": "https://github.com/gitcobra/AnZip.js#readme"
+}

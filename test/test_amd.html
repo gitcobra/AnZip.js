@@ -1,0 +1,13 @@
+<a id="link" href="#">unworked</a>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script src="./test.js"></script>
+<script>
+requirejs(["../dist/anzip.umd"], function(AnZip) {
+    var azip = test(AnZip);
+    link.href = azip.url();
+    link.download = "test_amd.zip";
+    link.textContent = "DOWNLOAD";
+
+    alert('done');
+});
+</script>

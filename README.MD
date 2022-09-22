@@ -1,70 +1,83 @@
-# AnZip.js
+# AnZip
 Creates an **uncompressed** zip file.
 
-It contains **no** compression processes, so the code is simple and **fast**.
-## Purpose
-When your website with JavaScript produces many binary files and wants to let users save them all, needs to make their browsers start download processes again and again.
+It contains **no** compression processes, so the code is simple and fast.
 
-AnZip.js provides an ***easy way*** to combine the files into **a zip file** so that their browsers need only a single download dialog.
+
+## Purpose
+When your website with JavaScript produces many binary files and wants to let users save them all, AnZip provides ***easy way*** to combine the files into **a zip file** so that their browsers need only a single download dialog.
+
 
 ## Installation
-Just copy and paste the content of `anzip.min.js` (or `anzip.js`) into your code, or load it from a script tag.
 
-
+```sh
+npm install @gitcobra/anzip
 ```
-<script src="anzip.min.js"></script>
-```
-CDN:
-```
-<script src="https://cdn.jsdelivr.net/gh/gitcobra/anzip.js/anzip.min.js"></script>
-```
-#AnZip.js pollutes variable name "AnZip" in the scope where you pasted.
 
 ## Usage
-3 simple steps
+### ES Module:
+```
+import AnZip from '@gitcobra/anzip'
+```
+### Node:
+```
+const AnZip = require('@gitcobra/anzip');
+```
+### CDN:
+```
+<script src="https://cdn.jsdelivr.net/npm/@gitcobra/anzip/dist/anzip.umd.min.js"></script>
+```
 
-1. `new AnZip` :The constructor needs no parameter.
+### Windows Scripting Host (WSH):
+https://cdn.jsdelivr.net/npm/@gitcobra/anzip/dist/anzip.iife.js
 
-1. `.add(path, data)` :Add directories and data.
+Download and load it.
+See a test folder on github for details.
 
-1. `.zip()` :Get an uncompressed zip as Uint8Array.
 
-#### Sample Code:
+## Sample Code
 ```
 // sample data
-var dat = new Uint8Array([0,1,2,3,4]);
-var dat2 = new Uint8Array([255,254,253,252,251]);
-var dat3 = 'text data';
+var bin = new Uint8Array([0, 1, 2, 3, 127, 255]);
+var txt = 'text data';
 
 // 1: create new AnZip object
 var azip = new AnZip;
 
 // 2: add the data
-azip.add('dir1/dir2/file1.bin', dat);
-azip.add('dir1/dir2/file2.bin', dat2);
-azip.add('dir3/file3.txt', dat3);
+azip.add('dir1/dir1_1/file1.bin', bin);
+azip.add('dir2/text.txt', txt);
 
-// 3: output the zip as an Uint8Array
-var zip = azip.zip();
-
-// convert to Blob URL
-var blob = new Blob([zip], {type: 'application/zip'});
-var src = window.URL.createObjectURL(blob);
+// 3: output a zip as Uint8Array
+var array = azip.zip();
 ```
 
-## Methods
+## API methods
+
 ### add(`path` [, `data`])
 - `path`: string
 - `data`: TypedArray, ArrayBuffer, Array, string, Buffer(node.js)
 
-Constructs directories and adds data to the zip. Throws an Error when you add any `data` to `path` already exists.
+- Constructs directories and add data to the zip. Throw an Error when you add any `data` to `path` already exists.
+
 ### has(`path`)
 - `path`: string
 - Return Value: boolean
 
-Checks whether the `path` already exists.
+- Check whether the `path` already exists.
 
 ### zip()
 - Return Value: Uint8Array (may be Array in old environment)
 
-Outputs the zip binary as an Uint8Array.
+- Output the data as an Uint8Array.
+
+### url()
+- Return Value: string
+- Output an object url.
+
+### blob()
+- Return Value: Blob
+- Output a blob.
+
+### clear()
+- Clear all data

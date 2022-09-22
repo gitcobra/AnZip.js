@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+<job>
+<object id="adodb" progid="ADODB.Stream"/>
+<object id="xmldom" progid="Microsoft.XMLDOM"/>
+<script src="../dist/anzip.iife.js"></script>
+<script src="./test.js"></script>
+<script><![CDATA[
+
+// test AnZip
+var azip = test(AnZip);
+
+// array to hex string
+var zip = azip.zip();
+var hex = [];
+var len = zip.length;
+for( var i=0; i < len; i++ ) {
+  hex.push((zip[i] | 0x100).toString(16).substring(1));
+}
+hex = hex.join('');
+
+// converts hex string to binary data using Microsoft.XMLDOM
+var binNode = xmldom.createElement('binNode');
+binNode.dataType = 'bin.hex';
+binNode.text = hex;
+var bin = binNode.nodeTypedValue;
+
+// write binary
+var adTypeBinary = 1;
+adodb.Type = adTypeBinary;
+adodb.Open();
+adodb.Write(bin);
+adodb.SaveToFile('../tmp/file_wsh.zip', 2);
+adodb.Close();
+
+WSH.Echo('done');
+
+]]></script>
+</job>
+</package>
