@@ -1,12 +1,12 @@
 {
   "name": "@gitcobra/anzip",
-  "version": "1.0.1",
+  "version": "1.0.7",
   "description": "Simply creates uncompressed zip file.",
   "main": "dist/anzip.umd.js",
   "browser": "dist/anzip.esm.js",
   "files": [
-    "dist/**/*",
-    "types/**/*"
+    "dist/**/*.js",
+    "types/**/*.d.ts"
   ],
   "directories": {},
   "devDependencies": {
@@ -15,6 +15,7 @@
     "typescript": "^4.8.3"
   },
   "scripts": {
+    "dev": "rollup -c --watch",
     "build": "rollup -c && tsc ./src/anzip.js --declaration --allowJs --emitDeclarationOnly --outDir types",
     "test": "node ./test/test_node.js"
   },
@@ -27,5 +28,13 @@
   "bugs": {
     "url": "https://github.com/gitcobra/AnZip.js/issues"
   },
-  "homepage": "https://github.com/gitcobra/AnZip.js#readme"
+  "homepage": "https://github.com/gitcobra/AnZip.js#readme",
+  "keywords": [
+    "zip",
+    "uncompressed",
+    "browser",
+    "es3",
+    "wsh",
+    "hta"
+  ]
 }

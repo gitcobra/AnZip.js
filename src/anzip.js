@@ -1,4 +1,4 @@
-export default AnZip
+export default AnZip;
 
 /**
  * AnZip constructor
@@ -53,27 +53,36 @@ AnZip.prototype.add = function (path, dat) {
   // check path
   if (!path)
     throw new Error('path is empty');
-  path = String(path).replace(/\\/g, '/'); // replace backslashes with forward slashes
+  // replace backslash with forward slash
+  path = String(path).replace(/\\/g, '/');
   if (/\/{2,}|\\|^\/|^[a-z]+:/i.test(path))
     throw new Error('invalid path. containing a drive letter, a leading slash, or empty directory name: "' + path + '"');
 
   // check file
   var size = 0, crc = 0;
   if (typeof dat !== 'undefined') {
+    // file name has to be specified
     if (!/[^/]+$/.test(path))
       throw new Error('needs a file name: "' + path + '"');
+    
+    // convert string to utf-8 binary
     if (typeof dat === 'string')
       dat = strToUTF8Array(dat);
-    if (!(dat instanceof A8)) try {
+    
+    // check for type other than TypedArray
+    if ( !(dat instanceof A8) ) try {
       if (dat.buffer || dat instanceof Array || dat instanceof ArrayBuffer || dat instanceof Buffer)
         dat = new Uint8Array(dat.buffer || dat);
       else
         throw new Error;
     } catch (e) {
-      throw new Error('data must be one of type Array, TypedArray, ArrayBuffer, Buffer, or string.');
+      throw new Error('data must be one of the following types Array, TypedArray, ArrayBuffer, Buffer, or string.');
     }
+    
+    // check for duplication
     if (this.has(path))
-      throw new Error('the file already exists: ' + path);
+      throw new Error('the path already exists: ' + path);
+    
     size = dat.length;
     crc = getCRC32(dat);
   }
@@ -119,7 +128,7 @@ AnZip.prototype.add = function (path, dat) {
     this._curLFHind += 30 + pathLen + dsize;
   }
   
-  // add file
+  // add file data
   if (dat)
     this._lfh.push(dat);
 };
@@ -224,7 +233,7 @@ function strToUTF8Array(str) {
   if( typeof TextEncoder === 'function' ) {
     a = new TextEncoder('utf-8').encode(str);
   }
-  // for old environment
+  // for the old environments
   else {
     a = [];
     encodeURI(str).replace(/%(..)|(.)/g, function (m, $hex, $chr) {
@@ -234,7 +243,7 @@ function strToUTF8Array(str) {
   return a;
 }
 
-// get 32bit number as a little-endian array
+// 32bit number to little-endian byte array
 function getLE32(num) {
   return [num & 0xFF, num >> 8 & 0xFF, num >> 16 & 0xFF, num >> 24 & 0xFF];
 }
