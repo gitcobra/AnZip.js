@@ -55,6 +55,7 @@ AnZip.prototype.add = function (path, dat) {
     throw new Error('path is empty');
   // replace backslash with forward slash
   path = String(path).replace(/\\/g, '/');
+  // check characters
   if (/\/{2,}|\\|^\/|^[a-z]+:/i.test(path))
     throw new Error('invalid path. containing a drive letter, a leading slash, or empty directory name: "' + path + '"');
 

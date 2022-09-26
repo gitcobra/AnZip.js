@@ -1,13 +1,14 @@
 {
   "name": "@gitcobra/anzip",
-  "version": "1.0.7",
-  "description": "Simply creates uncompressed zip file.",
+  "version": "1.0.8",
+  "description": "super easy way to create an uncompressed zip file.",
   "main": "dist/anzip.umd.js",
   "browser": "dist/anzip.esm.js",
   "files": [
     "dist/**/*.js",
     "types/**/*.d.ts"
   ],
+  "types": "types/anzip.d.ts",
   "directories": {},
   "devDependencies": {
     "rollup": "^2.72.1",

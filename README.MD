@@ -1,5 +1,5 @@
 # AnZip
-Create an **uncompressed** zip file.
+It creates an **uncompressed** zip file.
 
 - extremely easy to use
 - all methods are synchronous
@@ -50,7 +50,7 @@ var azip = new AnZip;
 azip.add('dir1/dir1_1/file1.bin', bin);
 azip.add('dir2/text.txt', txt);
 
-// 3: output a zip as Uint8Array
+// 3: output the zip as Uint8Array
 var array = azip.zip();
 ```
 
@@ -59,9 +59,9 @@ var array = azip.zip();
 
 ### add(`path` [, `data`])
 - `path`: `string`
-  - path to directory or file in the zip
+  - Path to directory or file in the zip. Forward slash('/') and backslash('\\') are both allowed for directory separators.
 - `data` (optional): `TypedArray` | `Array` | `string` | `ArrayBuffer` | `Buffer`
-  - data you want to store
+  - Data you want to store
 - Return Value: `void`
 
 - Construct directories in the zip then add data if specified. Throw an Error when you try to add any data to path already exists.
@@ -74,7 +74,7 @@ var array = azip.zip();
 
 ### zip()
 - Return Value: `Uint8Array`
-  - *may be Array in the old environments such as WSH
+  - May be Array in the old environments such as WSH
 - Output the zip binary as an Uint8Array.
 
 ### clear()
@@ -97,9 +97,9 @@ Always return null or empty string in old environments.
 ### blob()
 - Return Value: `Blob`
 
-- Output a `Blob`.
+- Output as a `Blob`.
 
 ### url()
 - Return Value: `string`
 
-- Output an object url.
+- Output as an object url.
